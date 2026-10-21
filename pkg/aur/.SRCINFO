@@ -1,0 +1,26 @@
+pkgbase = sc-cli-git
+	pkgdesc = SoundCloud in your terminal: TUI remote for mpv with feed, likes, spectrum and MPRIS
+	pkgver = r0
+	pkgrel = 1
+	url = https://github.com/la4zen/sc-cli
+	arch = x86_64
+	arch = aarch64
+	license = MIT
+	makedepends = cargo
+	makedepends = git
+	depends = mpv
+	depends = yt-dlp
+	depends = libpulse
+	depends = gcc-libs
+	depends = glibc
+	optdepends = python-curl_cffi: lets yt-dlp get past 403 from the SoundCloud CDN
+	optdepends = firefox: logged-in cookie for feed, likes and your tracks
+	provides = sc-cli
+	conflicts = sc-cli
+	conflicts = sc
+	options = !lto
+	options = !debug
+	source = sc-cli-git::git+https://github.com/la4zen/sc-cli.git
+	sha256sums = SKIP
+
+pkgname = sc-cli-git

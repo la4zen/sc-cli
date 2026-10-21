@@ -1,0 +1,41 @@
+# Maintainer: la4zen <la4zen@gmail.com>
+pkgname=sc-cli-git
+pkgver=r0
+pkgrel=1
+pkgdesc='SoundCloud in your terminal: TUI remote for mpv with feed, likes, spectrum and MPRIS'
+arch=(x86_64 aarch64)
+url='https://github.com/la4zen/sc-cli'
+license=(MIT)
+depends=(mpv yt-dlp libpulse gcc-libs glibc)
+makedepends=(cargo git)
+optdepends=('python-curl_cffi: lets yt-dlp get past 403 from the SoundCloud CDN'
+  'firefox: logged-in cookie for feed, likes and your tracks')
+provides=(sc-cli)
+conflicts=(sc-cli sc)
+options=(!lto !debug)
+source=("$pkgname::git+$url.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$pkgname"
+  printf 'r%s.%s' "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+prepare() {
+  cd "$pkgname"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+}
+
+build() {
+  cd "$pkgname"
+  export RUSTUP_TOOLCHAIN=stable CARGO_TARGET_DIR=target
+  cargo build --frozen --release
+}
+
+package() {
+  cd "$pkgname"
+  install -Dm755 target/release/sc "$pkgdir/usr/bin/sc"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+}
