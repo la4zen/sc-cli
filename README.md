@@ -2,7 +2,7 @@
 
 SoundCloud in your terminal. A TUI remote for `mpv` that plays in the background — close the UI, the music keeps going.
 
-[![demo](assets/demo.jpg)](assets/demo.mp4)
+[![demo](assets/demo.gif)](assets/demo.mp4)
 
 - feed, likes, your tracks, playlists, search — via api-v2 under your own account (cookie from Firefox)
 - truecolor cover art, accent colour picked from the cover
