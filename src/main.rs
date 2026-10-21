@@ -94,7 +94,9 @@ fn run(initial: (Option<&str>, Option<String>)) -> anyhow::Result<()> {
             if app.dirty {
                 app.dirty = false;
                 term.draw(|f| ui::draw(f, &mut app))?;
-                app.follow();
+                if app.relayout() {
+                    term.draw(|f| ui::draw(f, &mut app))?;
+                }
             }
         }
         Ok(())

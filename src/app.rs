@@ -225,6 +225,7 @@ pub struct App {
     row_index: HashMap<String, usize>,
     pub cursor: usize,
     pub scroll: usize,
+    last_page: usize,
     pub cur_url: Option<String>,
     pub accent: Rgb,
     acc_from: Rgb,
@@ -287,6 +288,7 @@ impl App {
             row_index: HashMap::new(),
             cursor: 0,
             scroll: 0,
+            last_page: 0,
             cur_url: None,
             accent: SC_ORANGE,
             acc_from: SC_ORANGE,
@@ -1060,6 +1062,20 @@ impl App {
         } else if self.cursor >= self.scroll + page {
             self.scroll = self.cursor + 1 - page;
         }
+    }
+
+    /// После отрисовки: высота таблицы стала известна или поменялась (первый кадр,
+    /// ресайз) — докрутить к курсору. Только тогда: иначе прокрутка колесом,
+    /// если курсор ушёл за экран, отщёлкивала бы назад. true — надо перерисовать.
+    pub fn relayout(&mut self) -> bool {
+        let page = self.page();
+        if page == self.last_page {
+            return false;
+        }
+        self.last_page = page;
+        let s = self.scroll;
+        self.follow();
+        self.scroll != s
     }
 
     fn fill(&mut self, rows: Vec<Row>, keep: bool) {
